@@ -1,0 +1,15 @@
+training:
+  preprosessing:
+    year_split: 2017
+  features:
+    numeric_attributes:
+      - but_latitude
+      - but_longitude
+      - day_id_year
+    categorical_atributes:
+      - day_id_week
+      - day_id_month
+      - but_region_idr_region
+      - zod_idr_zone_dgr
+      - but_num_business_unit
+      - dpt_num_department
