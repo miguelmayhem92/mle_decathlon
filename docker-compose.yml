@@ -23,3 +23,10 @@ services:
       dockerfile: modules/model_training/Dockerfile
     environment:
       - MLFLOW_TRACKING_URI=http://host.docker.internal:5000
+
+  inference:
+    image: mle_decathlon:inference.latest
+    container_name: inference
+    build:
+      context: .
+      dockerfile: modules/inference/Dockerfile

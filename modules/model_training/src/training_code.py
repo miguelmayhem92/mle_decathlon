@@ -16,8 +16,10 @@ from sklearn.ensemble import GradientBoostingRegressor
 from src.custom_transformers import CustomPreprocressing
 
 DATA_FOLDER = "data"
+EXPERIMENT_NAME="forecasting"
+RUN_NAME="run_0"
 BASE_DIR = os.path.dirname("app")
-mlflow.set_tracking_uri("http://localhost:5000/") # for local testing
+# mlflow.set_tracking_uri("http://localhost:5000/") # for local testing
 
 class TrainerClient:
     """
@@ -109,10 +111,11 @@ class TrainerClient:
 
     def _log_model(self):
         logger.info("logging artifacts in remote repository")
-        mlflow.set_experiment("my_experiment")
-        with mlflow.start_run(run_name="run_1"):
+        mlflow.set_experiment(EXPERIMENT_NAME)
+        with mlflow.start_run(run_name=RUN_NAME):
             mlflow.log_metric("val_mae", self.metric_mae)
             mlflow.log_dict(self.configs, "configs.json")
             mlflow.sklearn.log_model(self.model_pipeline, name="model",code_paths=["src/"])
             mlflow.log_artifact("data/", "feature_store/")
+        logger.info("logging finished")
 
