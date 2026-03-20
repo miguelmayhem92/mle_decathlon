@@ -18,4 +18,4 @@ docker compose up -d inference
 
 finally the ui
 
-docker compose up -d streamlit
+docker compose up -d frontend

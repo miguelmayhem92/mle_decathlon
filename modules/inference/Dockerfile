@@ -8,13 +8,6 @@ ARG module="inference"
 
 WORKDIR /app
 
-# Install build tools
-# RUN yum update -y && yum install -y \
-#     gcc \
-#     gcc-c++ \
-#     make \
-#     && yum clean all
-
 RUN pip install poetry poetry-plugin-export
 
 COPY pyproject.toml .
@@ -31,8 +24,6 @@ RUN pip install --only-binary=:all: \
     --upgrade \
     -r requirements.txt
 
-# RUN poetry config virtualenvs.create false \
-#     && poetry install --only main --no-root
 
 COPY ./${root}/${module}/build.py .
 RUN python build.py --experiment_name forecasting --run_name run_0
