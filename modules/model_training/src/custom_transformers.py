@@ -25,9 +25,9 @@ class CustomPreprocressing(BaseEstimator, TransformerMixin):
           -- DataFrame, DataFrame prepared for modeling
 
         """
-        data.loc[:,"day_id"] = pd.to_datetime(data["day_id"]).copy() # these lines are problematic with warnings, using loc istead 
-        data.loc[:,"day_id_week"] = data.day_id.dt.isocalendar().week
-        data.loc[:,"day_id_month"] = data["day_id"].dt.month
-        data.loc[:,"day_id_year"] = data["day_id"].dt.year
-        data.loc[:,self.cat_cols] = data[self.cat_cols].apply(lambda x: x.astype(str))
+        data["day_id"] = pd.to_datetime(data["day_id"]).copy() # these lines are problematic with warnings, using loc istead 
+        data["day_id_week"] = data.day_id.dt.isocalendar().week
+        data["day_id_month"] = data["day_id"].dt.month
+        data["day_id_year"] = data["day_id"].dt.year
+        data[self.cat_cols] = data[self.cat_cols].apply(lambda x: x.astype(str))
         return data
