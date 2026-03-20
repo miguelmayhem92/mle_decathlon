@@ -13,11 +13,11 @@ from sklearn.pipeline import Pipeline
 from sklearn.metrics import mean_absolute_error
 from sklearn.ensemble import GradientBoostingRegressor
 
-from .custom_transformers import CustomPreprocressing
+from src.custom_transformers import CustomPreprocressing
 
 DATA_FOLDER = "data"
 BASE_DIR = os.path.dirname("app")
-# mlflow.set_tracking_uri("http://mlflow_server:5000/")
+# mlflow.set_tracking_uri("http://localhost:5000/") # for local testing
 
 class TrainerClient:
     """
@@ -110,8 +110,8 @@ class TrainerClient:
     def _log_model(self):
         logger.info("logging artifacts in remote repository")
         mlflow.set_experiment("my_experiment")
-        with mlflow.start_run(run_name="run_0"):
+        with mlflow.start_run(run_name="run_1"):
             mlflow.log_metric("val_mae", self.metric_mae)
             mlflow.log_dict(self.configs, "configs.json")
-            mlflow.sklearn.log_model(self.model_pipeline, artifact_path="model")
+            mlflow.sklearn.log_model(self.model_pipeline, name="model",code_paths=["src/"])
 
