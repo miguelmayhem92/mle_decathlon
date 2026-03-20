@@ -4,6 +4,7 @@ from pathlib import Path
 import yaml
 import pandas as pd
 from loguru import logger
+import mlflow
 
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.compose import ColumnTransformer
@@ -16,6 +17,7 @@ from .custom_transformers import CustomPreprocressing
 
 DATA_FOLDER = "data"
 BASE_DIR = os.path.dirname("app")
+# mlflow.set_tracking_uri("http://mlflow_server:5000/")
 
 class TrainerClient:
     """
@@ -23,9 +25,9 @@ class TrainerClient:
     """
     def __init__(self,model_name:str)->None:
         self.model_name = model_name
-        configs = yaml.safe_load(Path(os.path.join("configs","training.yml")).read_text())
-        self.preprocessing_configs = configs["training"]["preprosessing"]
-        self.features_config = configs["training"]["features"]
+        self.configs = yaml.safe_load(Path(os.path.join("configs","training.yml")).read_text())
+        self.preprocessing_configs = self.configs["training"]["preprosessing"]
+        self.features_config = self.configs["training"]["features"]
 
     def run(self):
         self._extraction_job()
@@ -106,4 +108,10 @@ class TrainerClient:
         self.metric_mae = mean_absolute_error(self.y_val, y_predict_val)
 
     def _log_model(self):
-        pass
+        logger.info("logging artifacts in remote repository")
+        mlflow.set_experiment("my_experiment")
+        with mlflow.start_run(run_name="run_0"):
+            mlflow.log_metric("val_mae", self.metric_mae)
+            mlflow.log_dict(self.configs, "configs.json")
+            mlflow.sklearn.log_model(self.model_pipeline, artifact_path="model")
+

@@ -18,5 +18,5 @@ COPY ./${root}/${train_folder}/src ./src
 COPY ./${root}/${train_folder}/configs ./configs
 COPY ./${root}/${train_folder}/train.py .
 
-# CMD ["python", "train.py"]
-RUN python train.py
+CMD ["python", "train.py"]
+# RUN python train.py

@@ -1,14 +1,25 @@
-version: "1.0"
 services:
-  # mlflow_server:
-  #   image: mle_decathlon:model_repository.latest
-  #   container_name: model_repository
-  #   build:
-  #     context: .
-  #     dockerfile: modules/model_training/Dockerfile
+  mlflow_server:
+    image: mle_decathlon:model_repository.latest
+    container_name: model_repository
+    build:
+      context: .
+      dockerfile: modules/model_repository/Dockerfile
+    ports:
+      - "5000:5000" 
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/')"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
   trainer:
     image: mle_decathlon:trainer.latest
     container_name: trainer
     build:
       context: .
       dockerfile: modules/model_training/Dockerfile
+    environment:
+      - MLFLOW_TRACKING_URI=http://host.docker.internal:5000
