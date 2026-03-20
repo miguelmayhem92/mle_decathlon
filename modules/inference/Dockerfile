@@ -26,7 +26,7 @@ ENV MODEL_DIR="dependencies_model"
 ARG root="modules"
 ARG module="inference"
 
-COPY --from=builder app/.venv/lib/python3.11/site-packages/ ${LAMBDA_RUNTIME_DIR}/
+COPY --from=builder usr/local/lib/python3.11/site-packages ${LAMBDA_RUNTIME_DIR}/
 
 COPY --from=builder /app/dependencies_model/ ${LAMBDA_TASK_ROOT}/model/
 COPY --from=builder /app/dep_features/ ${LAMBDA_TASK_ROOT}/dep_features/

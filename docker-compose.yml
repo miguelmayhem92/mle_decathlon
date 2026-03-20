@@ -30,3 +30,5 @@ services:
     build:
       context: .
       dockerfile: modules/inference/Dockerfile
+    ports:
+      - "9000:8080"
