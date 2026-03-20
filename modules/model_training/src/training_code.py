@@ -17,7 +17,7 @@ from src.custom_transformers import CustomPreprocressing
 
 DATA_FOLDER = "data"
 BASE_DIR = os.path.dirname("app")
-# mlflow.set_tracking_uri("http://localhost:5000/") # for local testing
+mlflow.set_tracking_uri("http://localhost:5000/") # for local testing
 
 class TrainerClient:
     """
@@ -114,4 +114,5 @@ class TrainerClient:
             mlflow.log_metric("val_mae", self.metric_mae)
             mlflow.log_dict(self.configs, "configs.json")
             mlflow.sklearn.log_model(self.model_pipeline, name="model",code_paths=["src/"])
+            mlflow.log_artifact("data/", "feature_store/")
 
