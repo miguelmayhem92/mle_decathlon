@@ -12,9 +12,10 @@ from sklearn.pipeline import Pipeline
 from sklearn.metrics import mean_absolute_error
 from sklearn.ensemble import GradientBoostingRegressor
 
-from custom_transformers import CustomPreprocressing
+from .custom_transformers import CustomPreprocressing
 
 DATA_FOLDER = "data"
+BASE_DIR = os.path.dirname("app")
 
 class TrainerClient:
     """
@@ -23,8 +24,8 @@ class TrainerClient:
     def __init__(self,model_name:str)->None:
         self.model_name = model_name
         configs = yaml.safe_load(Path(os.path.join("configs","training.yml")).read_text())
-        self.preprocessing_configs = configs["preprosessing"]
-        self.features_config = configs["features"]
+        self.preprocessing_configs = configs["training"]["preprosessing"]
+        self.features_config = configs["training"]["features"]
 
     def run(self):
         self._extraction_job()
@@ -97,11 +98,12 @@ class TrainerClient:
 
     def _fit_model(self):
         logger.info("fiting model definition")
-        self.model_pipelinefit(self.df_train, self.y_train)
+        self.model_pipeline.fit(self.df_train, self.y_train)
     
     def _evaluation(self):
         logger.info("model evaluation")
-        self.metric_mae = mean_absolute_error(self.y_val, self.y_predict_val)
+        y_predict_val = self.model_pipeline.predict(self.df_val)
+        self.metric_mae = mean_absolute_error(self.y_val, y_predict_val)
 
     def _log_model(self):
         pass
