@@ -1,7 +1,8 @@
 import os
 import sys
 import argparse
-# sys.path.append(os.path.abspath("asset-layer/modules"))
+
+sys.path.append(os.path.abspath("deps"))
 
 import mlflow
 from loguru import logger
