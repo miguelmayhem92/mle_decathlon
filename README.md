@@ -5,7 +5,7 @@ archi overview:
 
 how to run?
 
-make sure you have docker in your machine:
+make sure you have docker in your machine and you are running on linux (otherwise some endpoints would crash if running on windows)
 
 first run mlflow server with:
 
