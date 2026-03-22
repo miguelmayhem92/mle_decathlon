@@ -4,3 +4,6 @@ ipynb_checkpoints
 __pycache__/
 .vscode/
 .vscode
+tmp/
+/tmp/
+scripts/
