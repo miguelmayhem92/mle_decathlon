@@ -95,8 +95,8 @@ to connect to the ui with the following url:
 http://localhost:8501/
 ```
 
-launhc one monitor job
+launch one monitor job
 
 ```
-monitoring
+docker compose up -d monitoring
 ```
