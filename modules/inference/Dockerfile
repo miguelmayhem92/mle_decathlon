@@ -10,7 +10,7 @@ WORKDIR /app
 
 RUN pip install poetry poetry-plugin-export
 
-COPY pyproject.toml .
+COPY ./${root}/${module}/pyproject.toml .
 
 RUN poetry export -f requirements.txt --only main --without-hashes -o requirements.txt
 
@@ -41,7 +41,6 @@ COPY --from=builder /app/deps/ ${LAMBDA_RUNTIME_DIR}/
 
 COPY --from=builder /app/dependencies_model/ ${LAMBDA_TASK_ROOT}/model/
 COPY --from=builder /app/dep_features/ ${LAMBDA_TASK_ROOT}/dep_features/
-COPY ./${root}/${module}/src ${LAMBDA_TASK_ROOT}/src/
 COPY ./${root}/${module}/main.py ${LAMBDA_TASK_ROOT}
 
 CMD [ "main.handler" ]
