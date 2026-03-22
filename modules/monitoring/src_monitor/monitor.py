@@ -14,7 +14,7 @@ DOWNLOAD_DIR=os.getenv("DOWNLOAD_DIR", "model_deps")
 YEAR_SPLIT = 2016
 
 mlflow.set_tracking_uri("http://host.docker.internal:5000") # in docker
-mlflow.set_tracking_uri("http://localhost:5000") # local
+# mlflow.set_tracking_uri("http://localhost:5000") # local
 
 
 class Monitor:

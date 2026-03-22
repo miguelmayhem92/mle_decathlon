@@ -41,3 +41,12 @@ services:
       dockerfile: modules/frontend/Dockerfile
     ports:
       - "8501:8501"
+
+  monitoring:
+    image: mle_decathlon:minitor.latest
+    container_name: minitor
+    build:
+      context: .
+      dockerfile: modules/monitoring/Dockerfile
+    environment:
+      - MLFLOW_TRACKING_URI=http://host.docker.internal:5000
