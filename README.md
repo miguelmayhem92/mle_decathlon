@@ -46,7 +46,7 @@ services are separated in modules
 * model_training -> this folder have the model logic and code so that an image can train it
 * inference -> folder dedicated to the inference code
 * frontend -> folder of the user interface that will interact with the inference service
-
+* Monitor -> launch offline or on demand model monitoring or drift detection. Result is logged in mlflow
 
 ## how to run?
 

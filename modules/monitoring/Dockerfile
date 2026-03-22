@@ -6,6 +6,8 @@ ARG train_folder="monitoring"
 
 WORKDIR /app
 
+RUN apt-get update && apt-get install -y libgomp1 && rm -rf /var/lib/apt/lists/*
+
 RUN pip install poetry
 
 COPY ./${root}/${train_folder}/pyproject.toml .
