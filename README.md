@@ -1,11 +1,13 @@
 # Decathlon forecasting  and model deployment usecase
 
 
+## Overview
 
 
-the following MVP has the following architecture
 
-## archi overview:
+## Architecture overview:
+
+this MVP has the following architecture
 
 ![alt text](https://github.com/miguelmayhem92/mle_decathlon/blob/main/images/mle_decathlon.drawio.png)
 
@@ -19,7 +21,7 @@ reason of this architecure:
 * inference service will deploy in its image the model and dependencies so that model wont depend on other services. Also it allows to comunicate with other services like external endpoints, or dedicated clients
 * the frontend is an user interface that allows to interact with the model
 
-## repo overview
+## Repo overview
 
 the repo architecture is the following:
 
@@ -34,6 +36,7 @@ the repo architecture is the following:
 │   ├── inference
 │   ├── model_repository
 │   └── model_training
+│   └── monitoring
 ├── poetry.lock
 ├── pyproject.toml
 └── README.md
@@ -46,9 +49,9 @@ services are separated in modules
 * model_training -> this folder have the model logic and code so that an image can train it
 * inference -> folder dedicated to the inference code
 * frontend -> folder of the user interface that will interact with the inference service
-* Monitor -> launch offline or on demand model monitoring or drift detection. Result is logged in mlflow
+* Monitoring -> folder of the monitoring service using nannyml an on demand tasks
 
-## how to run?
+## How to run?
 
 make sure you have docker in your machine and you are running on linux (otherwise some endpoints would crash if running on windows)
 
