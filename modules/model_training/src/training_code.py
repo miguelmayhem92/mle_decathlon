@@ -47,7 +47,6 @@ class TrainerClient:
         logger.info("Launching data extraction")
         self.df_bu_feat = pd.read_csv(os.path.join(DATA_FOLDER,"bu_feat.csv.gz")) 
         self.df_train = pd.read_csv(os.path.join(DATA_FOLDER, "train.csv.gz"))
-        self.df_test = pd.read_csv(os.path.join(DATA_FOLDER, "test.csv.gz"))
         logger.info("Data is extracted")
 
     def _data_processing(self):
@@ -58,7 +57,6 @@ class TrainerClient:
         year_split = self.preprocessing_configs["year_split"]
         # mergin the data
         df_train_feat = pd.merge(self.df_train, self.df_bu_feat, how="left", on = "but_num_business_unit")
-        df_test_feat = pd.merge(self.df_test, self.df_bu_feat, how="left", on = "but_num_business_unit")
 
         # Train and val set
         df_train_feat["day_id"] = pd.to_datetime(df_train_feat["day_id"])
