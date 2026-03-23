@@ -25,7 +25,7 @@ RUN pip install --only-binary=:all: \
     -r requirements.txt
 
 
-COPY ./${root}/${module}/build.py .
+COPY ./${root}/${module}/src_inference/build.py .
 RUN python build.py --experiment_name forecasting --run_name run_0
 
 # run stage
@@ -41,6 +41,9 @@ COPY --from=builder /app/deps/ ${LAMBDA_RUNTIME_DIR}/
 
 COPY --from=builder /app/dependencies_model/ ${LAMBDA_TASK_ROOT}/model/
 COPY --from=builder /app/dep_features/ ${LAMBDA_TASK_ROOT}/dep_features/
+
+COPY ./${root}/${module}/src_inference/inference.py ${LAMBDA_TASK_ROOT}/src_inference/
+COPY ./${root}/${module}/src_inference/models/ ${LAMBDA_TASK_ROOT}/src_inference/models/
 COPY ./${root}/${module}/main.py ${LAMBDA_TASK_ROOT}
 
 CMD [ "main.handler" ]

@@ -9,3 +9,4 @@ poetry.lock
 ./inference/test.ipynb
 /tmp/
 scripts/
+local_scripts/

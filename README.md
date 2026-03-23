@@ -3,7 +3,7 @@
 
 ## Overview
 
-
+Demand forecasting system built for Decathlon, covering the ML lifecycle: from model conception to model serving, with a user-facing dashboard and production monitoring.
 
 ## Architecture overview:
 
@@ -83,7 +83,7 @@ then deploy the inference service
 docker compose up -d inference
 ```
 
-finally the ui built on streamlit
+The ui built on streamlit
 
 ```
 docker compose up -d frontend
