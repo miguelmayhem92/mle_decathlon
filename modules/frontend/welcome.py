@@ -12,11 +12,22 @@ st.write("""
     Lets predict
 """)
 
+st.write("""
+    example values:
+         
+         * start date: 2017-01-01, 2017-10-01
+
+         * business unit: 4, 64, 119
+
+         * department number: 128, 73, 88
+         
+""")
+
 url = "http://host.docker.internal:9000/2015-03-31/functions/function/invocations"
 
-input_date = str(st.date_input("date id", datetime.date(2017, 11, 25)))
-b_number = int(st.number_input("business unit", 93))
-d_number = int(st.number_input("department number", 127))
+input_date = str(st.date_input("date id", value = datetime.date(2017, 11, 25)))
+b_number = int(st.number_input("business unit", value = 93))
+d_number = int(st.number_input("department number", value = 127))
 
 if st.button('get prediction'):
     payload = {'day_id': [input_date],
