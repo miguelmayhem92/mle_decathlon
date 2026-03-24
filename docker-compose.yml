@@ -43,8 +43,8 @@ services:
       - "8501:8501"
 
   monitoring:
-    image: mle_decathlon:minitor.latest
-    container_name: minitor
+    image: mle_decathlon:monitor.latest
+    container_name: monitor
     build:
       context: .
       dockerfile: modules/monitoring/Dockerfile
