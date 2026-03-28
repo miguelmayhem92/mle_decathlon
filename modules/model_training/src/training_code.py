@@ -125,7 +125,7 @@ class TrainerClient:
         with mlflow.start_run(run_name=RUN_NAME):
             mlflow.log_metric("val_mae", self.metric_mae)
             mlflow.log_dict(self.configs, "configs.json")
-            mlflow.sklearn.log_model(self.model_pipeline, name="model",code_paths=["src/"])
-            mlflow.log_artifact("data/", "feature_store/")
+            mlflow.sklearn.log_model(self.model_pipeline, name="model",code_paths=["modules/model_training/src/"])
+            mlflow.log_artifact("data/", "data_version/")
         logger.info("logging finished")
 
