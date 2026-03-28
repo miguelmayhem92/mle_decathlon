@@ -13,9 +13,12 @@ from sklearn.pipeline import Pipeline
 from sklearn.metrics import mean_absolute_error
 from sklearn.ensemble import GradientBoostingRegressor
 
-from src.custom_transformers import CustomPreprocressing
+from modules.model_training.src.custom_transformers import CustomPreprocressing
+from modules.common.data_loader import DataLoader
 
-DATA_FOLDER = "data"
+
+DATA_FOLDER = os.getenv("DATA_FOLDER","modules/data")
+
 EXPERIMENT_NAME="forecasting"
 RUN_NAME="run_0"
 BASE_DIR = os.path.dirname("app")
@@ -27,13 +30,14 @@ class TrainerClient:
     """
     def __init__(self,model_name:str)->None:
         self.model_name = model_name
-        self.configs = yaml.safe_load(Path(os.path.join("configs","training.yml")).read_text())
+        self.configs = yaml.safe_load(Path(os.path.join("modules","model_training","configs","training.yml")).read_text())
         self.preprocessing_configs = self.configs["training"]["preprosessing"]
         self.features_config = self.configs["training"]["features"]
 
     def run(self):
         self._extraction_job()
         self._data_processing()
+        self._data_test()
         self._get_model_definition()
         self._fit_model()
         self._evaluation()
@@ -45,11 +49,17 @@ class TrainerClient:
         this method extracts the data from the warehouse
         """
         logger.info("Launching data extraction")
-        self.df_bu_feat = pd.read_csv(os.path.join(DATA_FOLDER,"bu_feat.csv.gz")) 
-        self.df_train = pd.read_csv(os.path.join(DATA_FOLDER, "train.csv.gz"))
+        dl = DataLoader(DATA_FOLDER)
+        self.df_bu_feat = dl.get_data("bu_feat.csv.gz")
+        self.df_train = dl.get_data("train.csv.gz")
         logger.info("Data is extracted")
+    
+    def _data_test(self):
+        assert str(self.df_train.but_num_business_unit.dtype) == "int64"
+        assert str(self.df_train.dpt_num_department.dtype) == "int64"
+        assert self.df_train.but_num_business_unit.mean() > 0
 
-    def _data_processing(self):
+    def _data_processing(self,sample:float=None):
         """
         this method executes data preprocessing
         """
@@ -57,6 +67,8 @@ class TrainerClient:
         year_split = self.preprocessing_configs["year_split"]
         # mergin the data
         df_train_feat = pd.merge(self.df_train, self.df_bu_feat, how="left", on = "but_num_business_unit")
+        if sample:
+            df_train_feat = df_train_feat.sample(frac=sample)
 
         # Train and val set
         df_train_feat["day_id"] = pd.to_datetime(df_train_feat["day_id"])

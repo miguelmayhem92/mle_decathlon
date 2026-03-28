@@ -10,3 +10,5 @@ poetry.lock
 /tmp/
 scripts/
 local_scripts/
+.pytest_cache/
+../model_training/data/
