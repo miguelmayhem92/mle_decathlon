@@ -43,6 +43,8 @@ services:
       dockerfile: modules/frontend/Dockerfile
     ports:
       - "8501:8501"
+    environment:
+      - URL=http://host.docker.internal:9000/2015-03-31/functions/function/invocations
 
   monitoring:
     image: mle_decathlon:monitor.latest

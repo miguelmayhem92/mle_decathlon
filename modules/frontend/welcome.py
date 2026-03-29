@@ -1,5 +1,6 @@
 import datetime
 import json
+import os
 
 import streamlit as st
 import requests
@@ -23,7 +24,7 @@ st.write("""
          
 """)
 
-url = "http://host.docker.internal:9000/2015-03-31/functions/function/invocations"
+url = os.getenv("URL")
 
 input_date = str(st.date_input("date id", value = datetime.date(2017, 11, 25)))
 b_number = int(st.number_input("business unit", value = 93))
