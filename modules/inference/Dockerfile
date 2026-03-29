@@ -1,10 +1,13 @@
 # build stage
 FROM python:3.11-slim AS builder
 
-ENV MODEL_DIR="dependencies_model"
-
 ARG root="modules"
 ARG module="inference"
+ARG module_training="model_training"
+ARG MLFLOW_TRACKING_URI
+
+ENV MODULE_PATH="${root}/${module}"
+ENV MODEL_DEPS_PATH="${root}/${module_training}"
 
 WORKDIR /app
 
@@ -25,25 +28,29 @@ RUN pip install --only-binary=:all: \
     -r requirements.txt
 
 
+# RUN mkdir -p ./${MODEL_DEPS_PATH}/src/custom_transformers/
+
 COPY ./${root}/${module}/src_inference/build.py .
-RUN python build.py --experiment_name forecasting --run_name run_0
+
+RUN python build.py --experiment_name forecasting --run_name run_0 --mlflow_url ${MLFLOW_TRACKING_URI}
 
 # run stage
 FROM public.ecr.aws/lambda/python:3.11 AS run
 
-ENV MODEL_DIR="dependencies_model"
-
 ARG root="modules"
 ARG module="inference"
 
-# COPY --from=builder usr/local/lib/python3.11/site-packages ${LAMBDA_RUNTIME_DIR}/
-COPY --from=builder /app/deps/ ${LAMBDA_RUNTIME_DIR}/
+ENV DOWNLOAD_DIR="modules/model_training"
+ENV MODULE_PATH="${root}/${module}"
 
-COPY --from=builder /app/dependencies_model/ ${LAMBDA_TASK_ROOT}/model/
-COPY --from=builder /app/dep_features/ ${LAMBDA_TASK_ROOT}/dep_features/
+WORKDIR ${LAMBDA_TASK_ROOT}
 
-COPY ./${root}/${module}/src_inference/inference.py ${LAMBDA_TASK_ROOT}/src_inference/
-COPY ./${root}/${module}/src_inference/models/ ${LAMBDA_TASK_ROOT}/src_inference/models/
-COPY ./${root}/${module}/main.py ${LAMBDA_TASK_ROOT}
+COPY --from=builder /app/deps/ ./
+COPY --from=builder /app/${DOWNLOAD_DIR}/ ./${DOWNLOAD_DIR}/
+COPY --from=builder /app/dep_features/ ./dep_features/
+
+COPY ./${MODULE_PATH}/src_inference/inference.py ./${MODULE_PATH}/src_inference/
+COPY ./${MODULE_PATH}/src_inference/models/ ./${MODULE_PATH}/src_inference/models/
+COPY ./${MODULE_PATH}/main.py ${LAMBDA_TASK_ROOT}
 
 CMD [ "main.handler" ]

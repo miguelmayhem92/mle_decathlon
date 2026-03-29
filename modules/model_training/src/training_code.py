@@ -23,6 +23,7 @@ EXPERIMENT_NAME="forecasting"
 RUN_NAME="run_0"
 BASE_DIR = os.path.dirname("app")
 # mlflow.set_tracking_uri("http://localhost:5000/") # for local testing
+mlflow.set_tracking_uri(os.getenv("MLFLOW_TRACKING_URI")) 
 
 class TrainerClient:
     """

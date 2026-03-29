@@ -30,6 +30,8 @@ services:
     build:
       context: .
       dockerfile: modules/inference/Dockerfile
+      args:
+        - MLFLOW_TRACKING_URI=http://host.docker.internal:5000
     ports:
       - "9000:8080"
 

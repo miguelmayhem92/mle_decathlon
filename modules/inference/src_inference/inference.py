@@ -6,7 +6,7 @@ from loguru import logger
 
 from modules.inference.src_inference.models.input import Message
 
-
+DOWNLOAD_DIR=os.getenv("DOWNLOAD_DIR", "modules/model_training")
 
 class InferenceProduce:
     def preprocess_input(self, input:dict)->pd.DataFrame:
@@ -17,7 +17,7 @@ class InferenceProduce:
         return input_pd
 
     def instantiate_model(self):
-        self.model = mlflow.sklearn.load_model("model")
+        self.model = mlflow.sklearn.load_model(DOWNLOAD_DIR)
 
     def get_features(self,input_pd:pd.DataFrame) -> pd.DataFrame:
         logger.info("tgetting features")
