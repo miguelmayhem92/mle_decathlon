@@ -18,7 +18,7 @@ class MyMlflowClient:
         mlflow.set_tracking_uri(mlflow_url)
         self.mlflow_client = mlflow.tracking.MlflowClient()
 
-    def find_model_ids(self,experiment_name:str, run_name:str):
+    def find_model_ids(self,experiment_name:str, run_name:str)->tuple[str,str]:
         experiment = self.mlflow_client.get_experiment_by_name(experiment_name)
         runs = self.mlflow_client.search_runs(experiment_ids=[experiment.experiment_id])
 
@@ -59,7 +59,7 @@ class ModelBuilder:
         os.makedirs("tmp", exist_ok=True)
         os.makedirs(DOWNLOAD_DIR, exist_ok=True)
     
-    def _find_experiments(self, experiment_name:str, run_name:str)->str:
+    def _find_experiments(self, experiment_name:str, run_name:str)->tuple[str,str]:
         logger.info(f"looking for model experiment: {experiment_name}")
         model_uri, run_id = self.mlflow_client.find_model_ids(experiment_name, run_name)
         return model_uri, run_id
