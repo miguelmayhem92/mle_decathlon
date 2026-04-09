@@ -1,7 +1,7 @@
 import os
 
 import pandas as pd
-import mlflow
+from mlflow.sklearn import load_model
 from loguru import logger
 
 from modules.inference.src_inference.models.input import Message
@@ -17,7 +17,7 @@ class InferenceProduce:
         return input_pd
 
     def instantiate_model(self):
-        self.model = mlflow.sklearn.load_model(DOWNLOAD_DIR)
+        self.model = load_model(DOWNLOAD_DIR)
 
     def get_features(self,input_pd:pd.DataFrame) -> pd.DataFrame:
         logger.info("tgetting features")
